@@ -1,0 +1,11 @@
+<h1><%= @image.name.presence || 'Imagen sin nombre' %></h1>
+
+<% if @image.file.attached? %>
+  <%= image_tag @image.file %>
+<% else %>
+  <p>Esta imagen no tiene un archivo adjunto para mostrar.</p>
+<% end %>
+
+<p>Subida por: <%= @image.user.email %></p>
+
+<%= link_to 'Volver a la galería', images_path %>

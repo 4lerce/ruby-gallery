@@ -1,0 +1,48 @@
+<h1>Mi Galería Personal</h1>
+
+<h2>Subir Nueva Imagen</h2>
+<%= form_with model: @image || Image.new, url: images_path, method: :post, html: { multipart: true } do |form| %>
+  <div>
+    <%= form.label :name, 'Nombre (opcional):' %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :file, 'Seleccionar Imagen:' %>
+    <%= form.file_field :file %>
+  </div>
+
+  <div>
+    <%= form.submit 'Subir Imagen' %>
+  </div>
+<% end %>
+
+<h2>Mis Imágenes</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 20px;">
+  <% @images.each do |image| %>
+    <div>
+      <% if image.file.attached? %>
+        <%# Modifica esta línea para que sea un enlace %>
+        <%= link_to image_path(image) do %>
+          <%= image_tag image.file.variant(resize_to_limit: [150, 150]) %>
+        <% end %>
+
+        <%# Botón para eliminar %>
+        <%= button_to 'Eliminar', image_path(image), method: :delete, data: { confirm: '¿Estás seguro de que quieres eliminar esta imagen?' } %>
+      <% else %>
+        <p>No hay imagen adjunta.</p>
+        <%= button_to 'Eliminar registro vacío', image_path(image), method: :delete, data: { confirm: 'Este registro no tiene imagen. ¿Eliminarlo?' } if image.persisted? %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<% if notice.present? %>
+  <p style="color: green"><%= notice %></p>
+<% end %>
+
+<% if alert.present? %>
+  <p style="color: red"><%= alert %></p>
+<% end %>
+
+<%= link_to 'Cerrar Sesión', destroy_user_session_path, method: :delete %>
