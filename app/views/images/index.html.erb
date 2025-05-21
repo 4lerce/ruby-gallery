@@ -7,6 +7,13 @@
     <%= form.text_field :name %>
   </div>
 
+  <% if Image.new.has_attribute?(:description) %> <%# Esto verifica si la columna description existe %>
+    <div>
+      <%= form.label :description, 'Descripción (opcional):' %>
+      <%= form.text_area :description %>
+    </div>
+  <% end %>
+
   <div>
     <%= form.label :file, 'Seleccionar Imagen:' %>
     <%= form.file_field :file %>

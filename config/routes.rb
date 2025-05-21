@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     authenticated :user do
       root "images#index", as: :authenticated_root
-      resources :images, only: [ :index, :create, :destroy, :show ]
+      resources :images, only: [ :index, :create, :destroy, :show, :edit, :update ]
     end
 
     unauthenticated do

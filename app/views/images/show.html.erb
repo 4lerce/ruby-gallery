@@ -1,4 +1,11 @@
+<%# app/views/images/show.html.erb %>
 <h1><%= @image.name.presence || 'Imagen sin nombre' %></h1>
+
+<% if @image.has_attribute?(:description) && @image.description.present? %>
+  <p>Descripción: <%= @image.description %></p>
+<% elsif @image.has_attribute?(:description) %>
+  <p>Descripción: (Ninguna)</p>
+<% end %>
 
 <% if @image.file.attached? %>
   <%= image_tag @image.file %>
@@ -8,4 +15,5 @@
 
 <p>Subida por: <%= @image.user.email %></p>
 
+<%= link_to 'Editar Imagen', edit_image_path(@image) %> |
 <%= link_to 'Volver a la galería', images_path %>

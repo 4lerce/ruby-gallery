@@ -1,0 +1,33 @@
+<h1>Editar Imagen: <%= @image.name.presence || 'Sin nombre' %></h1>
+
+<%= form_with model: @image, url: image_path(@image), method: :patch, local: true do |form| %>
+  <% if form.object.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(form.object.errors.count, "error") %> impidieron que esta imagen se guardara:</h2>
+      <ul>
+        <% form.object.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, 'Nombre:' %>
+    <%= form.text_field :name %>
+  </div>
+
+  <% if @image.has_attribute?(:description) %> <%# Esto verifica si la columna description existe %>
+    <div>
+      <%= form.label :description, 'Descripción:' %>
+      <%= form.text_area :description %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.submit 'Actualizar Imagen' %>
+  </div>
+<% end %>
+
+<%= link_to 'Ver Imagen', image_path(@image) %> |
+<%= link_to 'Volver a la galería', images_path %>
