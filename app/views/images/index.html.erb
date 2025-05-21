@@ -2,12 +2,23 @@
 
 <h2>Subir Nueva Imagen</h2>
 <%= form_with model: @image || Image.new, url: images_path, method: :post, html: { multipart: true } do |form| %>
+  <% if form.object.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(form.object.errors.count, "error") %> impidieron que esta imagen se guardara:</h2>
+      <ul>
+        <% form.object.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <div>
     <%= form.label :name, 'Nombre (opcional):' %>
     <%= form.text_field :name %>
   </div>
 
-  <% if Image.new.has_attribute?(:description) %> <%# Esto verifica si la columna description existe %>
+  <% if Image.new.has_attribute?(:description) %>
     <div>
       <%= form.label :description, 'Descripción (opcional):' %>
       <%= form.text_area :description %>
@@ -16,7 +27,12 @@
 
   <div>
     <%= form.label :file, 'Seleccionar Imagen:' %>
-    <%= form.file_field :file %>
+    <%= form.file_field :file, id: 'image-upload-input' %> <%# Añade id: 'image-upload-input' %>
+  </div>
+
+  <%# Añade el contenedor para la previsualización %>
+  <div style="margin-top: 10px;">
+    <img id="image-preview" src="#" alt="Previsualización de Imagen" style="max-width: 200px; max-height: 200px; border: 1px solid #ccc; display: none;">
   </div>
 
   <div>
@@ -53,3 +69,31 @@
 <% end %>
 
 <%= link_to 'Cerrar Sesión', destroy_user_session_path, method: :delete %>
+
+<%# <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('image-upload-input');
+    const imagePreview = document.getElementById('image-preview');
+
+    if (fileInput && imagePreview) {
+      fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0]; // Obtiene el primer archivo seleccionado
+
+        if (file) {
+          const reader = new FileReader(); // Objeto para leer el contenido del archivo
+
+          reader.onload = function(e) {
+            imagePreview.src = e.target.result; // Establece la fuente de la imagen a los datos del archivo
+            imagePreview.style.display = 'block'; // Hace visible la imagen
+          };
+
+          reader.readAsDataURL(file); // Lee el archivo como una URL de datos (Base64)
+        } else {
+          // Si no se selecciona ningún archivo, oculta la previsualización
+          imagePreview.src = '#';
+          imagePreview.style.display = 'none';
+        }
+      });
+    }
+  });
+</script> %>
