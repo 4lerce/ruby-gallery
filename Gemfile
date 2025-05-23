@@ -64,3 +64,4 @@ end
 
 gem "devise"
 gem "activestorage"
+gem "active_storage_validations"

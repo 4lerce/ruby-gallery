@@ -3,7 +3,7 @@ class ImagesController < ApplicationController
   before_action :set_image, only: [ :destroy, :show, :edit, :update ]
 
   def index
-    @images = current_user.images
+    @images = current_user.images.order(created_at: :desc)
     @image = current_user.images.build
   end
 
@@ -12,7 +12,7 @@ class ImagesController < ApplicationController
     if @image.save
       redirect_to images_path, notice: "¡Imagen subida exitosamente!"
     else
-      @images = current_user.images
+      @images = current_user.images.order(created_at: :desc)
       render :index, alert: "Hubo un error al subir la imagen."
     end
   end

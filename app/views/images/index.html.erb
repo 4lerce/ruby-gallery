@@ -1,9 +1,9 @@
-<h1>Mi Galería Personal</h1>
+<h3>Mi Galería Personal</h3>
 
-<h2>Subir Nueva Imagen</h2>
-<%= form_with model: @image || Image.new, url: images_path, method: :post, html: { multipart: true } do |form| %>
+<h4>Subir Nueva Imagen</h4>
+<%= form_with model: @image || Image.new, url: images_path, method: :post, html: { multipart: true }, data: { turbo: false } do |form| %>
   <% if form.object.errors.any? %>
-    <div id="error_explanation">
+    <div id="error_explanation" style="color: red; font-weight: bold; margin-bottom: 10px;">
       <h2><%= pluralize(form.object.errors.count, "error") %> impidieron que esta imagen se guardara:</h2>
       <ul>
         <% form.object.errors.full_messages.each do |message| %>
@@ -42,10 +42,10 @@
 
 <h2>Mis Imágenes</h2>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 20px;">
+  <% if @images.any? %>
   <% @images.each do |image| %>
     <div>
       <% if image.file.attached? %>
-        <%# Modifica esta línea para que sea un enlace %>
         <%= link_to image_path(image) do %>
           <%= image_tag image.file.variant(resize_to_limit: [150, 150]) %>
         <% end %>
@@ -58,42 +58,5 @@
       <% end %>
     </div>
   <% end %>
+  <% end %>
 </div>
-
-<% if notice.present? %>
-  <p style="color: green"><%= notice %></p>
-<% end %>
-
-<% if alert.present? %>
-  <p style="color: red"><%= alert %></p>
-<% end %>
-
-<%= link_to 'Cerrar Sesión', destroy_user_session_path, method: :delete %>
-
-<%# <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const fileInput = document.getElementById('image-upload-input');
-    const imagePreview = document.getElementById('image-preview');
-
-    if (fileInput && imagePreview) {
-      fileInput.addEventListener('change', function(event) {
-        const file = event.target.files[0]; // Obtiene el primer archivo seleccionado
-
-        if (file) {
-          const reader = new FileReader(); // Objeto para leer el contenido del archivo
-
-          reader.onload = function(e) {
-            imagePreview.src = e.target.result; // Establece la fuente de la imagen a los datos del archivo
-            imagePreview.style.display = 'block'; // Hace visible la imagen
-          };
-
-          reader.readAsDataURL(file); // Lee el archivo como una URL de datos (Base64)
-        } else {
-          // Si no se selecciona ningún archivo, oculta la previsualización
-          imagePreview.src = '#';
-          imagePreview.style.display = 'none';
-        }
-      });
-    }
-  });
-</script> %>
